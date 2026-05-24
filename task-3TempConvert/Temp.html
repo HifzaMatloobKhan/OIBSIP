@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TempSphere</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="welcome">
+    <h1>Welcome to TempSphere</h1>
+    <p>Convert temperatures instantly with live global data style</p>
+  </div>
+
+  <div class="weather-card">
+    <h2>🌍 Weather Spotlight</h2>
+
+    <div class="weather-row">
+      <img id="flag" class="flag">
+
+      <div>
+        <h3 id="city">--</h3>
+        <div class="weather-info">
+          <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" class="icon">
+          <span id="weatherText">--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="converter">
+
+    <input type="number" id="tempInput" placeholder="Enter temperature">
+
+    <div class="select-box">
+      <select id="fromUnit">
+        <option value="c">Celsius</option>
+        <option value="f">Fahrenheit</option>
+        <option value="k">Kelvin</option>
+      </select>
+
+      <select id="toUnit">
+        <option value="f">To Fahrenheit</option>
+        <option value="c">To Celsius</option>
+        <option value="k">To Kelvin</option>
+      </select>
+    </div>
+
+    <button onclick="convertTemp()">Convert</button>
+
+    <div class="result">
+      <h2 id="output">--</h2>
+      <p id="status">Waiting for conversion</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const countries = [
+  {city:"Tokyo, Japan", flag:"https://cdn-icons-png.flaticon.com/512/197/197604.png"},
+  {city:"Paris, France", flag:"https://cdn-icons-png.flaticon.com/512/197/197560.png"},
+  {city:"New York, USA", flag:"https://cdn-icons-png.flaticon.com/512/197/197484.png"},
+  {city:"Dubai, UAE", flag:"https://cdn-icons-png.flaticon.com/512/197/197574.png"},
+  {city:"London, UK", flag:"https://cdn-icons-png.flaticon.com/512/197/197374.png"}
+];
+
+function updateWeather() {
+  let random = countries[Math.floor(Math.random() * countries.length)];
+
+  let temp = Math.floor(Math.random() * 35) + 5;
+
+  document.getElementById("city").innerText = random.city;
+  document.getElementById("flag").src = random.flag;
+  document.getElementById("weatherText").innerText = `${temp}°C • Live`;
+}
+
+function convertTemp() {
+
+  let temp = document.getElementById("tempInput").value;
+  let from = document.getElementById("fromUnit").value;
+  let to = document.getElementById("toUnit").value;
+
+  let output = document.getElementById("output");
+  let status = document.getElementById("status");
+
+  if (temp === "" || isNaN(temp)) {
+    output.innerText = "Invalid Input";
+    status.innerText = "Enter a number";
+    return;
+  }
+
+  temp = parseFloat(temp);
+
+  let result;
+
+  if (from === to) result = temp;
+
+  else if (from === "c" && to === "f") result = (temp * 9/5) + 32;
+  else if (from === "c" && to === "k") result = temp + 273.15;
+
+  else if (from === "f" && to === "c") result = (temp - 32) * 5/9;
+  else if (from === "f" && to === "k") result = ((temp - 32) * 5/9) + 273.15;
+
+  else if (from === "k" && to === "c") result = temp - 273.15;
+  else if (from === "k" && to === "f") result = ((temp - 273.15) * 9/5) + 32;
+
+  output.innerText = result.toFixed(2);
+  status.innerText = "Converted successfully ✔";
+
+  updateWeather();
+}
+
+updateWeather();
+</script>
+
+</body>
+</html>
